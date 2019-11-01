@@ -27,18 +27,18 @@ jobs:
 commands:
   wait-for-heroku:
     steps:
-      when:
-        condition: ${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}
-        steps:
-          - run:
-              name: Wait for heroku deployment to begin
-              command: |
-                timeout 300 bash -c -- 'until heroku builds:info -a ${HEROKU_APP_INSTANCE}  | grep -m 1 "pending"; do : ; done'
-                echo timeout 300 bash -c -- 'until heroku builds:info -a ${HEROKU_APP_INSTANCE}  | grep -m 1 "pending"; do : ; done'
-          - run:
-              name: Wait for heroku deployment to complete
-              command: |
-                timeout 300 bash -c -- 'until heroku builds:info -a ${HEROKU_APP_INSTANCE} | grep -m 1 "succeeded"; do : ; done'
+      - when:
+          condition: ${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}
+          steps:
+            - run:
+                name: Wait for heroku deployment to begin
+                command: |
+                  timeout 300 bash -c -- 'until heroku builds:info -a ${HEROKU_APP_INSTANCE}  | grep -m 1 "pending"; do : ; done'
+                  echo timeout 300 bash -c -- 'until heroku builds:info -a ${HEROKU_APP_INSTANCE}  | grep -m 1 "pending"; do : ; done'
+            - run:
+                name: Wait for heroku deployment to complete
+                command: |
+                  timeout 300 bash -c -- 'until heroku builds:info -a ${HEROKU_APP_INSTANCE} | grep -m 1 "succeeded"; do : ; done'
 description: Deploy to heroku and wait for deployment to complete
 version: 2.1
 orbs:
