@@ -33,14 +33,14 @@ commands:
             timeout 300 bash -c -- 'until heroku builds:info -a ${HEROKU_APP_INSTANCE}  | grep -m 1 "pending"; do : ; done'
           filters:
             branches:
-              exclude: master
+              ignore: master
       - run:
           name: Wait for heroku deployment to complete
           command: |
             timeout 300 bash -c -- 'until heroku builds:info -a ${HEROKU_APP_INSTANCE} | grep -m 1 "succeeded"; do : ; done'
           filters:
             branches:
-              exclude: master
+              ignore: master
 description: Deploy to heroku and wait for deployment to complete
 version: 2.1
 orbs:
