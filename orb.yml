@@ -21,6 +21,20 @@ jobs:
           var-value: ${HEROKU_APP_NAME}-pr-${PR_NUM}
       - heroku/install
       - run: heroku plugins:install heroku-builds
+      - wait-for-heroku
+      - heroku/deploy-via-git:
+          only-branch: master
+commands:
+  wait-for-heroku:
+    steps:
+      - run:
+          name: Ensuring workflow is associated with a pull request
+          command: |
+            prNumber="${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}"
+            if [[ -z "${prNumber}" ]]; then
+              echo "This workflow is not associated with a pull request; halting"
+              circleci-agent step halt
+            fi
       - run:
           name: Wait for heroku deployment to begin
           command: |
@@ -30,8 +44,6 @@ jobs:
           name: Wait for heroku deployment to complete
           command: |
             timeout 300 bash -c -- 'until heroku builds:info -a ${HEROKU_APP_INSTANCE} | grep -m 1 "succeeded"; do : ; done'
-      - heroku/deploy-via-git:
-          only-branch: master
 description: Deploy to heroku and wait for deployment to complete
 version: 2.1
 orbs:
