@@ -24,13 +24,13 @@ jobs:
       - heroku/deploy-via-git:
           only-branch: master
       - run:
-        name: Ensuring workflow is associated with a pull request
-        command: |
-          prNumber="${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}"
-          if [[ -z "${prNumber}" ]]; then
-            echo "This workflow is not associated with a pull request; halting"
-            circleci-agent step halt
-          fi
+          name: Ensuring workflow is associated with a pull request
+          command: |
+            prNumber="${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}"
+            if [[ -z "${prNumber}" ]]; then
+              echo "This workflow is not associated with a pull request; halting"
+              circleci-agent step halt
+            fi
       - run:
           name: Wait for heroku deployment to begin
           command: |
