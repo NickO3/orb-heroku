@@ -1,3 +1,10 @@
+## [1.0.6](https://github.com/o3world/orb-heroku/compare/v1.0.5...v1.0.6) (2019-11-01)
+
+
+### Bug Fixes
+
+* **orb:** Only wait for heroku on PRs ([d8ee965](https://github.com/o3world/orb-heroku/commit/d8ee965d78f7dc455a8186c767bfe297ab12a7da))
+
 ## [1.0.5](https://github.com/o3world/orb-heroku/compare/v1.0.4...v1.0.5) (2019-11-01)
 
 
