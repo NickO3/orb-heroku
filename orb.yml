@@ -1,0 +1,42 @@
+# This code is licensed from CircleCI to the user under the MIT license. See
+# https://circleci.com/orbs/registry/licensing for details.
+jobs:
+  init:
+    docker:
+      - image: buildpack-deps:trusty # primary container
+    steps:
+      - checkout
+  deploy:
+    executor: heroku/default
+    steps:
+      - checkout
+      - core/set-env-var:
+          var-name: PR_NUM
+          var-value: ${CI_PULL_REQUEST##*/}
+      - core/set-env-vars:
+          PR_TEST_SITE_URL: https://${HEROKU_APP_NAME}-pr-${PR_NUM}.herokuapp.com
+          PLATFORM_ID: ${HEROKU_APP_NAME}
+      - core/set-env-var:
+          var-name: HEROKU_APP_INSTANCE
+          var-value: ${HEROKU_APP_NAME}-pr-${PR_NUM}
+      - heroku/install
+      - run: heroku plugins:install heroku-builds
+      - run:
+          name: Wait for heroku deployment to begin
+          command: |
+            timeout 300 bash -c -- 'until heroku builds:info -a ${HEROKU_APP_INSTANCE}  | grep -m 1 "pending"; do : ; done'
+            echo timeout 300 bash -c -- 'until heroku builds:info -a ${HEROKU_APP_INSTANCE}  | grep -m 1 "pending"; do : ; done'
+      - run:
+          name: Wait for heroku deployment to complete
+          command: |
+            timeout 300 bash -c -- 'until heroku builds:info -a ${HEROKU_APP_INSTANCE} | grep -m 1 "succeeded"; do : ; done'
+      - heroku/deploy-via-git:
+          only-branch: master
+description: Deploy to heroku and wait for deployment to complete
+version: 2.1
+orbs:
+  node: circleci/node@1.1.6
+  heroku: circleci/heroku@0.0.8
+  react: thefrontside/react@0.2.0
+  core: o3world/orb-o3-core@volatile
+
