@@ -1,3 +1,10 @@
+## [1.0.7](https://github.com/o3world/orb-heroku/compare/v1.0.6...v1.0.7) (2019-11-01)
+
+
+### Bug Fixes
+
+* **ci:** dont run step on master ([81c102d](https://github.com/o3world/orb-heroku/commit/81c102d6fbc4e69586d442dc0b9c0a3fdd4983cb))
+
 ## [1.0.6](https://github.com/o3world/orb-heroku/compare/v1.0.5...v1.0.6) (2019-11-01)
 
 
